@@ -9,44 +9,32 @@ struct Int2 {
 std::string input;
 
 bool checkNext(char, char);
-std::string makeStringFromVector(const std::vector<int>&);
+void makeStringFromVector(const std::vector<Int2>&);
 
 int main() {
 
     std::cin >> input;
-    std::vector<Int2> indexesReform; // correct_in
     int inputSize = input.size();
-    std::vector<int> indexesIn(inputSize, -1);
+    std::vector<Int2> indexesReform(inputSize); // correct_in
     int indexesOut[inputSize];
     std::fill(indexesOut, indexesOut+inputSize, -1);
-    std::fill(indexesReform.begin(), indexesReform.end(), Int2({-1, -1}));
-    std::vector<int> correctIndex(inputSize, -1);
 
     int counter = 0;
 
     for (int i = 0; i < input.size(); i++){
-        correctIndex[i] = counter;
-        ++counter;
-    }
-
-    counter = 0;
-
-    for (int i = 0; i < input.size(); i++){
 
         if ((int)input[i] >= 97){
-            indexesIn[i] = counter;
+            indexesReform[i] = Int2({i, counter});
             ++counter;
+        } else {
+            indexesReform[i] = Int2({i, -1});
         }
     }
 
     bool impossible = false;
 
 //    std::cout << input << " input" << "\n";
-//    std::cout << makeStringFromVector(indexesIn) << " indexesIn" << "\n";
-//
-//    std::cout << makeStringFromVector(correctIndex) << " correctIndex" << "\n";
-
-    bool working = true;
+//    makeStringFromVector(indexesReform);
 
     while (input.empty() == false && impossible == false){
         impossible = true;
@@ -56,23 +44,20 @@ int main() {
 
 
                 if (input[i] < 97){
-                    int index = correctIndex[i];
+                    int index = indexesReform[i].a[0]; //corr
 //                    std::cout << index << " index setup" << "\n";
-                    indexesOut[index] = indexesIn[i+1];
+                    indexesOut[index] = indexesReform[i+1].a[1]; //inn
                 } else{
-                    int index = correctIndex[i+1];
+                    int index = indexesReform[i+1].a[0]; //corr
 //                    std::cout << index << " index setup" << "\n";
-                    indexesOut[index] = indexesIn[i];
+                    indexesOut[index] = indexesReform[i].a[1]; //inn
                 }
                 input.erase(i, 2);
-                indexesIn.erase(indexesIn.begin() + i, indexesIn.begin() + i + 2);
-                correctIndex.erase(correctIndex.begin() + i , correctIndex.begin() + i + 2);
+                indexesReform.erase(indexesReform.begin() + i, indexesReform.begin() + i + 2);
                 size = size - 2;
                 i--;
 //                std::cout << input << " input" << "\n";
-//                std::cout << makeStringFromVector(indexesIn) << " indexesIn" << "\n";
-//
-//                std::cout << makeStringFromVector(correctIndex) << " correctIndex" << "\n";
+//                makeStringFromVector(indexesReform);
 
                 impossible = false;
             }
@@ -106,12 +91,18 @@ bool checkNext(char now, char next){
     return flag;
 }
 
-std::string makeStringFromVector(const std::vector<int>& vector){
-    std::string out = "";
-    for (int i : vector){
-        out.append(std::to_string(i));
+void makeStringFromVector(const std::vector<Int2>& vector){
+    std::string out1 = "";
+    std::string out2 = "";
+    for (Int2 i : vector){
+        out1.append(std::to_string(i.a[0]));
+        out2.append(std::to_string(i.a[1]));
     }
-    return out;
+
+    std::cout << out1 << " correctIndex" << "\n";
+
+    std::cout << out2 << " indexesIn" << "\n";
+
 }
 
 
