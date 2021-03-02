@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 
 struct Int2 {
     char input;
@@ -10,13 +11,34 @@ std::string input;
 
 void makeStringFromVector(const std::vector<Int2>&);
 
+//std::stack<char> stack;
+
+
 int main() {
 
-    std::cin >> input;
+
+//    std::cin >> input;
+//
+//    char outArray[input.size()];
+//
+//    int indexCounter = 0;
+//
+//    stack.push(input[0]);
+//
+//    for(int i = 1; i < input.size(); i++){
+//        if ((int)stack.top() - (int)input[i] == 32){
+//
+//        }
+//    }
+
+
+
+
+
+
+
     int inputSize = input.size();
     std::vector<Int2> indexesReform(inputSize); // correct_in
-    auto indexesReformBegin = indexesReform.begin();
-    auto indexesReformBeginP2 = indexesReform.begin() + 2;
     int indexesOut[inputSize];
     std::fill(indexesOut, indexesOut+inputSize, -1);
 
@@ -41,19 +63,21 @@ int main() {
     while (size != 0 && impossible == false){
         impossible = true;
 
-        for (int i = 0; i < size - 1; i++){
-            if (abs((int)indexesReform[i].input - (int)indexesReform[i+1].input) == 32){
+        for (int i = 0; i < size; i++){
+            if (abs((int)indexesReform[i].input - (int)indexesReform[(i+1)%size].input) == 32){
                 if (indexesReform[i].input < 97){
                     int index = indexesReform[i].a[0]; //corr
-//                    std::cout << index << " index setup" << "\n";
-                    indexesOut[index] = indexesReform[i+1].a[1]; //inn
+//                    std::cout << index << " index setup1" << "\n";
+                    indexesOut[index] = indexesReform[(i+1)%size].a[1]; //inn
                 } else{
-                    int index = indexesReform[i+1].a[0]; //corr
-//                    std::cout << index << " index setup" << "\n";
+                    int index = indexesReform[(i+1)%size].a[0]; //corr
+//                    std::cout << index << " index setup2" << "\n";
                     indexesOut[index] = indexesReform[i].a[1]; //inn
                 }
-                indexesReform.erase(indexesReformBegin + i, indexesReformBeginP2 + i);
-                --size;
+
+                indexesReform.erase(indexesReform.begin() + i);
+                indexesReform.erase(indexesReform.begin() + (i % (size - 1)));
+                size--;
                 --size;
                 i--;
 //                makeStringFromVector(indexesReform);
